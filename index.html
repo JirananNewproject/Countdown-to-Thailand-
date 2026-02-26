@@ -50,17 +50,24 @@ body{
     gap: 5px;
     margin-top: 10px;
 }
+
 .calendar-day, .calendar-weekday {
     padding: 8px;
     background:#f0f0f0;
     border-radius:5px;
     text-align:center;
+    word-wrap: break-word;
+    font-size:14px;
 }
+
+/* Weekday header */
 .calendar-weekday {
     font-weight:bold;
     background:#90caf9;
     color:#0d47a1;
 }
+
+/* Special days */
 .calendar-day.travel {
     background:#ff9800;
     color:white;
@@ -71,6 +78,17 @@ body{
 }
 .calendar-day.today {
     border:2px solid #0d47a1;
+}
+
+/* ===== Responsive ===== */
+@media screen and (max-width: 480px) {
+    #calendar {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    .calendar-day, .calendar-weekday {
+        font-size:12px;
+        padding:6px;
+    }
 }
 </style>
 </head>
