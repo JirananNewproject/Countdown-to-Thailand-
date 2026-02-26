@@ -72,8 +72,8 @@ ADD - Addis Ababa
 
 <hr>
 <h3>🌤 อากาศวันเดินทาง</h3>
-<div id="weather">ใส่ API OpenWeather เองได้</div>
-
+<div id="weather">กำลังโหลดสภาพอากาศ...</div>
+    
 <div class="celebrate" id="celebrate">🎉🇹🇭✈️</div>
 
 </div>
@@ -121,6 +121,34 @@ function update(){
 
 setInterval(update,1000);
 update();
+    // =================== WEATHER ===================
+const apiKey = "YOUR_API_KEY"; // ใส่ API Key ของ OpenWeather
+const city = "Bangkok,TH";     // เมืองปลายทาง
+
+function fetchWeather() {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
+    .then(res => res.json())
+    .then(data => {
+        // หา forecast ที่ตรงกับวันบิน
+        let targetDate = endDate.toISOString().split("T")[0]; // YYYY-MM-DD
+        let forecast = data.list.find(f => f.dt_txt.startsWith(targetDate));
+        if(forecast){
+            let temp = forecast.main.temp.toFixed(1);
+            let desc = forecast.weather[0].description;
+            document.getElementById("weather").innerHTML = `🌡 ${temp}°C, ${desc}`;
+        } else {
+            document.getElementById("weather").innerHTML = "ไม่พบข้อมูลพยากรณ์วันนั้น";
+        }
+    })
+    .catch(err=>{
+        console.log(err);
+        document.getElementById("weather").innerHTML = "โหลดสภาพอากาศไม่สำเร็จ";
+    });
+}
+
+// เรียกตอนเริ่มเว็บและทุก 10 นาที
+fetchWeather();
+setInterval(fetchWeather, 10*60*1000);
 </script>
 
 </body>
