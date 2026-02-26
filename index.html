@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thailand Countdown Ultimate</title>
-
 <link rel="manifest" href="manifest.json">
 
 <style>
@@ -43,6 +42,29 @@ body{
     from{transform:scale(1);}
     to{transform:scale(1.2);}
 }
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+.calendar-day {
+    padding: 8px;
+    background:#f0f0f0;
+    border-radius:5px;
+    text-align:center;
+}
+.calendar-day.travel {
+    background:#ff9800;
+    color:white;
+}
+.calendar-day.work {
+    background:#4caf50;
+    color:white;
+}
+.calendar-day.today {
+    border:2px solid #0d47a1;
+}
 </style>
 </head>
 <body>
@@ -73,12 +95,17 @@ ADD - Addis Ababa
 <hr>
 <h3>🌤 อากาศวันเดินทาง</h3>
 <div id="weather">กำลังโหลดสภาพอากาศ...</div>
-    
+
+<hr>
+<h3>📆 ปฏิทิน</h3>
+<div id="calendar"></div>
+
 <div class="celebrate" id="celebrate">🎉🇹🇭✈️</div>
 
 </div>
 
 <script>
+// =================== COUNTDOWN ===================
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js');
 }
@@ -121,24 +148,18 @@ function update(){
 
 setInterval(update,1000);
 update();
-    // =================== WEATHER ===================
-const apiKey = "10305e607cbb444690ceede20de29e6a"; // ใส่ API Key ของ OpenWeather
-const city = "Bangkok,TH";     // เมืองปลายทาง
+
+// =================== WEATHER ===================
+const apiKey = "YOUR_API_KEY"; // ใส่ API Key ของคุณ
+const city = "Bangkok,TH";
 
 function fetchWeather() {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
     .then(res => res.json())
     .then(data => {
-        // หา forecast ที่ตรงกับวันบิน
-        let targetDate = endDate.toISOString().split("T")[0]; // YYYY-MM-DD
-        let forecast = data.list.find(f => f.dt_txt.startsWith(targetDate));
-        if(forecast){
-            let temp = forecast.main.temp.toFixed(1);
-            let desc = forecast.weather[0].description;
-            document.getElementById("weather").innerHTML = `🌡 ${temp}°C, ${desc}`;
-        } else {
-            document.getElementById("weather").innerHTML = "ไม่พบข้อมูลพยากรณ์วันนั้น";
-        }
+        let temp = data.main.temp.toFixed(1);
+        let desc = data.weather[0].description;
+        document.getElementById("weather").innerHTML = `🌡 ${temp}°C, ${desc}`;
     })
     .catch(err=>{
         console.log(err);
@@ -146,9 +167,49 @@ function fetchWeather() {
     });
 }
 
-// เรียกตอนเริ่มเว็บและทุก 10 นาที
 fetchWeather();
 setInterval(fetchWeather, 10*60*1000);
+
+// =================== CALENDAR ===================
+const travelDate = new Date("2026-04-23");
+const workDate = new Date("2026-02-05");
+
+function generateCalendar(year, month){
+    const calendar = document.getElementById("calendar");
+    calendar.innerHTML = "";
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month+1, 0).getDate();
+
+    for(let i=0;i<firstDay;i++){
+        let empty = document.createElement("div");
+        calendar.appendChild(empty);
+    }
+
+    for(let d=1;d<=lastDate;d++){
+        let day = document.createElement("div");
+        day.className="calendar-day";
+        day.textContent=d;
+
+        let thisDate = new Date(year, month, d);
+
+        if(thisDate.toDateString() === travelDate.toDateString()){
+            day.classList.add("travel");
+        }
+        if(thisDate.toDateString() === workDate.toDateString()){
+            day.classList.add("work");
+        }
+        const today = new Date();
+        if(thisDate.toDateString() === today.toDateString()){
+            day.classList.add("today");
+        }
+
+        calendar.appendChild(day);
+    }
+}
+
+const now = new Date();
+generateCalendar(now.getFullYear(), now.getMonth());
 </script>
 
 </body>
