@@ -20,7 +20,7 @@ body{
     color:#333;
     padding:20px;
     border-radius:20px;
-    max-width:500px;
+    max-width:95%;
     margin:auto;
 }
 .progress{
@@ -50,7 +50,6 @@ body{
     gap: 5px;
     margin-top: 10px;
 }
-
 .calendar-day, .calendar-weekday {
     padding: 8px;
     background:#f0f0f0;
@@ -59,15 +58,11 @@ body{
     word-wrap: break-word;
     font-size:14px;
 }
-
-/* Weekday header */
 .calendar-weekday {
     font-weight:bold;
     background:#90caf9;
     color:#0d47a1;
 }
-
-/* Special days */
 .calendar-day.travel {
     background:#ff9800;
     color:white;
@@ -95,7 +90,7 @@ body{
 <body>
 
 <div class="card">
-<h2>🇹🇭 Countdown Ultimate V6</h2>
+<h2>นับถอยหลังวันกลับบ้าน 😊🇹🇭</h2>
 
 <p>วันบินกลับ:</p>
 <input type="datetime-local" id="end">
@@ -110,10 +105,10 @@ body{
 <div id="world"></div>
 
 <hr>
-<h3>🛫 สนามบิน</h3>
+<h3>🛫 เส้นทางบิน (Transit)</h3>
 <div>
-BKK - Suvarnabhumi<br>
-ADD - Addis Ababa
+ADD → Singapore (SIN) → Kuala Lumpur (KUL) → BKK<br>
+วันบินกลับ: 23 เมษายน 2026
 </div>
 
 <hr>
@@ -135,48 +130,59 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js');
 }
 
-// =================== COUNTDOWN ===================
-let endDate=new Date(localStorage.getItem("end")||"2026-04-23T12:00");
-document.getElementById("end").value=endDate.toISOString().slice(0,16);
+// =================== COUNTDOWN + PROGRESS ===================
+let endDate = new Date(localStorage.getItem("end") || "2026-04-23T12:00");
+document.getElementById("end").value = endDate.toISOString().slice(0,16);
+const startDate = new Date("2026-02-05"); // วันทำงานแรก
 
 function saveDate(){
-    endDate=new Date(document.getElementById("end").value);
+    endDate = new Date(document.getElementById("end").value);
     localStorage.setItem("end",endDate);
 }
 
 function update(){
-    let now=new Date();
-    let remain=endDate-now;
+    let now = new Date();
+    let remain = endDate - now;
 
-    if(remain<=0){
+    if(remain <= 0){
         document.getElementById("countdown").innerHTML="🎉 ถึงวันกลับไทยแล้ว!";
         document.getElementById("celebrate").style.display="block";
-        return;
+    } else {
+        let d = Math.floor(remain/86400000);
+        let h = Math.floor((remain%86400000)/3600000);
+        let m = Math.floor((remain%3600000)/60000);
+        let s = Math.floor((remain%60000)/1000);
+
+        document.getElementById("countdown").innerHTML =
+            `เหลือ ${d} วัน ${h} ชม ${m} นาที ${s} วิ`;
+
+        // Progress bar อิงวันทำงานแรก → วันบินกลับไทย
+        let total = endDate - startDate;
+        let passed = now - startDate;
+        let percent = Math.min(Math.max((passed / total) * 100, 0), 100);
+
+        document.getElementById("bar").style.width = percent + "%";
+        document.getElementById("percent").innerHTML = "ความคืบหน้า "+percent.toFixed(1)+"%";
     }
 
-    let d=Math.floor(remain/86400000);
-    let h=Math.floor((remain%86400000)/3600000);
-    let m=Math.floor((remain%3600000)/60000);
-    let s=Math.floor((remain%60000)/1000);
+    // เวลาโลก
+    let thai = new Date().toLocaleString("th-TH",{timeZone:"Asia/Bangkok"});
+    let eth = new Date().toLocaleString("en-GB",{timeZone:"Africa/Addis_Ababa"});
+    let sin = new Date().toLocaleString("en-GB",{timeZone:"Asia/Singapore"});
+    let kul = new Date().toLocaleString("en-GB",{timeZone:"Asia/Kuala_Lumpur"});
 
-    document.getElementById("countdown").innerHTML=
-    `เหลือ ${d} วัน ${h} ชม ${m} นาที ${s} วิ`;
-
-    let percent=100-((remain/(1000*60*60*24*100))*100);
-    document.getElementById("bar").style.width=percent+"%";
-    document.getElementById("percent").innerHTML="ความคืบหน้า "+percent.toFixed(1)+"%";
-
-    let thai=new Date().toLocaleString("th-TH",{timeZone:"Asia/Bangkok"});
-    let eth=new Date().toLocaleString("en-GB",{timeZone:"Africa/Addis_Ababa"});
-    document.getElementById("world").innerHTML=
-    `🇹🇭 ไทย: ${thai}<br>🇪🇹 เอธิโอเปีย: ${eth}`;
+    document.getElementById("world").innerHTML =
+        `🇹🇭 ไทย: ${thai}<br>` +
+        `🇪🇹 เอธิโอเปีย: ${eth}<br>` +
+        `🇸🇬 สิงคโปร์: ${sin}<br>` +
+        `🇲🇾 กัวลาลัมเปอร์: ${kul}`;
 }
 
 setInterval(update,1000);
 update();
 
 // =================== WEATHER ===================
-const apiKey = "YOUR_API_KEY"; // ใส่ API Key ของคุณ
+const apiKey = "YOUR_API_KEY"; // ใส่ API Key ของ OpenWeather
 const city = "Bangkok,TH";
 
 function fetchWeather() {
