@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thailand Countdown Ultimate</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+body{
+    font-family:sans-serif;
+    text-align:center;
+    margin:0;
+    padding:20px;
+    background:linear-gradient(to right,#0d47a1,#42a5f5);
+    color:white;
+}
+.card{
+    background:white;
+    color:#333;
+    padding:20px;
+    border-radius:20px;
+    max-width:500px;
+    margin:auto;
+}
+.progress{
+    width:100%;
+    background:#ddd;
+    border-radius:10px;
+}
+.bar{
+    height:15px;
+    background:#4caf50;
+    width:0%;
+}
+.celebrate{
+    font-size:40px;
+    display:none;
+    animation:pop 1s infinite alternate;
+}
+@keyframes pop{
+    from{transform:scale(1);}
+    to{transform:scale(1.2);}
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h2>🇹🇭 Countdown Ultimate V6</h2>
+
+วันบินกลับ:
+<input type="datetime-local" id="end">
+<button onclick="saveDate()">บันทึก</button>
+
+<h3 id="countdown"></h3>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="percent"></div>
+
+<hr>
+<h3>🌍 เวลาโลก</h3>
+<div id="world"></div>
+
+<hr>
+<h3>🛫 สนามบิน</h3>
+<div>
+BKK - Suvarnabhumi<br>
+ADD - Addis Ababa
+</div>
+
+<hr>
+<h3>🌤 อากาศวันเดินทาง</h3>
+<div id="weather">ใส่ API OpenWeather เองได้</div>
+
+<div class="celebrate" id="celebrate">🎉🇹🇭✈️</div>
+
+</div>
+
+<script>
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js');
+}
+
+let endDate=new Date(localStorage.getItem("end")||"2026-04-23T12:00");
+document.getElementById("end").value=endDate.toISOString().slice(0,16);
+
+function saveDate(){
+    endDate=new Date(document.getElementById("end").value);
+    localStorage.setItem("end",endDate);
+}
+
+function update(){
+    let now=new Date();
+    let remain=endDate-now;
+
+    if(remain<=0){
+        document.getElementById("countdown").innerHTML="🎉 ถึงวันกลับไทยแล้ว!";
+        document.getElementById("celebrate").style.display="block";
+        return;
+    }
+
+    let d=Math.floor(remain/86400000);
+    let h=Math.floor((remain%86400000)/3600000);
+    let m=Math.floor((remain%3600000)/60000);
+    let s=Math.floor((remain%60000)/1000);
+
+    document.getElementById("countdown").innerHTML=
+    `เหลือ ${d} วัน ${h} ชม ${m} นาที ${s} วิ`;
+
+    let percent=100-((remain/(1000*60*60*24*100))*100);
+    document.getElementById("bar").style.width=percent+"%";
+    document.getElementById("percent").innerHTML="ความคืบหน้า "+percent.toFixed(1)+"%";
+
+    let thai=new Date().toLocaleString("th-TH",{timeZone:"Asia/Bangkok"});
+    let eth=new Date().toLocaleString("en-GB",{timeZone:"Africa/Addis_Ababa"});
+    document.getElementById("world").innerHTML=
+    `🇹🇭 ไทย: ${thai}<br>🇪🇹 เอธิโอเปีย: ${eth}`;
+}
+
+setInterval(update,1000);
+update();
+</script>
+
+</body>
+</html>
