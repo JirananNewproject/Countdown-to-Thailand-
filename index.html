@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thailand Countdown Ultimate</title>
+<title>Thailand Countdown Ultimate V6</title>
 <link rel="manifest" href="manifest.json">
 
 <style>
@@ -42,17 +42,24 @@ body{
     from{transform:scale(1);}
     to{transform:scale(1.2);}
 }
+
+/* ===== Calendar ===== */
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     margin-top: 10px;
 }
-.calendar-day {
+.calendar-day, .calendar-weekday {
     padding: 8px;
     background:#f0f0f0;
     border-radius:5px;
     text-align:center;
+}
+.calendar-weekday {
+    font-weight:bold;
+    background:#90caf9;
+    color:#0d47a1;
 }
 .calendar-day.travel {
     background:#ff9800;
@@ -72,12 +79,11 @@ body{
 <div class="card">
 <h2>🇹🇭 Countdown Ultimate V6</h2>
 
-วันบินกลับ:
+<p>วันบินกลับ:</p>
 <input type="datetime-local" id="end">
 <button onclick="saveDate()">บันทึก</button>
 
 <h3 id="countdown"></h3>
-
 <div class="progress"><div class="bar" id="bar"></div></div>
 <div id="percent"></div>
 
@@ -98,18 +104,20 @@ ADD - Addis Ababa
 
 <hr>
 <h3>📆 ปฏิทิน</h3>
+<button onclick="prevMonth()">◀ ก่อนหน้า</button>
+<button onclick="nextMonth()">ถัดไป ▶</button>
 <div id="calendar"></div>
 
 <div class="celebrate" id="celebrate">🎉🇹🇭✈️</div>
-
 </div>
 
 <script>
-// =================== COUNTDOWN ===================
+// =================== SERVICE WORKER ===================
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js');
 }
 
+// =================== COUNTDOWN ===================
 let endDate=new Date(localStorage.getItem("end")||"2026-04-23T12:00");
 document.getElementById("end").value=endDate.toISOString().slice(0,16);
 
@@ -166,17 +174,27 @@ function fetchWeather() {
         document.getElementById("weather").innerHTML = "โหลดสภาพอากาศไม่สำเร็จ";
     });
 }
-
 fetchWeather();
 setInterval(fetchWeather, 10*60*1000);
 
 // =================== CALENDAR ===================
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
 const travelDate = new Date("2026-04-23");
 const workDate = new Date("2026-02-05");
 
 function generateCalendar(year, month){
     const calendar = document.getElementById("calendar");
     calendar.innerHTML = "";
+
+    const weekdays = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
+    weekdays.forEach(dayName=>{
+        let day = document.createElement("div");
+        day.className="calendar-weekday";
+        day.textContent=dayName;
+        calendar.appendChild(day);
+    });
 
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month+1, 0).getDate();
@@ -186,7 +204,7 @@ function generateCalendar(year, month){
         calendar.appendChild(empty);
     }
 
-    for(let d=1;d<=lastDate;d++){
+    for(let d=1; d<=lastDate; d++){
         let day = document.createElement("div");
         day.className="calendar-day";
         day.textContent=d;
@@ -208,8 +226,24 @@ function generateCalendar(year, month){
     }
 }
 
-const now = new Date();
-generateCalendar(now.getFullYear(), now.getMonth());
+function prevMonth(){
+    calMonth--;
+    if(calMonth < 0){
+        calMonth = 11;
+        calYear--;
+    }
+    generateCalendar(calYear, calMonth);
+}
+function nextMonth(){
+    calMonth++;
+    if(calMonth > 11){
+        calMonth = 0;
+        calYear++;
+    }
+    generateCalendar(calYear, calMonth);
+}
+
+generateCalendar(calYear, calMonth);
 </script>
 
 </body>
