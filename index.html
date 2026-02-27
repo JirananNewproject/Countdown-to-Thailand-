@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thailand Countdown Ultimate</title>
-
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="theme-color" content="#0d47a1">
@@ -75,7 +74,6 @@ button:hover{opacity:.9;}
 <body>
 
 <div class="card">
-
 <h2>นับถอยหลังวันกลับบ้าน 🇹🇭✈️</h2>
 
 <p>วันบินกลับ:</p>
@@ -104,44 +102,40 @@ button:hover{opacity:.9;}
 <button onclick="prevMonth()">◀</button>
 <button onclick="nextMonth()">▶</button>
 <div id="calendar"></div>
-
 </div>
 
 <script>
-
 /* ================= SETTINGS ================= */
-
 const DEFAULT_DATE = "2026-04-23T23:50";
 const WORK_START = new Date("2026-02-05");
 const travelDate = new Date("2026-04-23");
 const workDate = new Date("2026-02-05");
 
 /* ================= DATE INIT ================= */
-
 let endDate = new Date(localStorage.getItem("end") || DEFAULT_DATE);
 
 function formatLocal(date){
-    const pad=n=>n.toString().padStart(2,'0');
+    const pad = n => n.toString().padStart(2,'0');
     return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())+
            "T"+pad(date.getHours())+":"+pad(date.getMinutes());
 }
-document.getElementById("end").value=formatLocal(endDate);
+
+document.getElementById("end").value = formatLocal(endDate);
 
 function saveDate(){
-    const val=document.getElementById("end").value;
+    const val = document.getElementById("end").value;
     if(!val) return;
-    endDate=new Date(val);
-    localStorage.setItem("end",val);
+    endDate = new Date(val);
+    localStorage.setItem("end", val);
     update();
 }
 
 /* ================= COUNTDOWN ================= */
-
 function update(){
-    const now=new Date();
-    const remain=endDate-now;
+    const now = new Date();
+    const remain = endDate - now;
 
-    if(remain<=0){
+    if(remain <=0){
         document.getElementById("countdown").innerHTML="🎉 ถึงวันกลับไทยแล้ว!";
         document.getElementById("bar").style.width="100%";
         document.getElementById("percent").innerHTML="100%";
@@ -149,31 +143,29 @@ function update(){
         return;
     }
 
-    const d=Math.floor(remain/86400000);
-    const h=Math.floor((remain%86400000)/3600000);
-    const m=Math.floor((remain%3600000)/60000);
-    const s=Math.floor((remain%60000)/1000);
+    const d = Math.floor(remain/86400000);
+    const h = Math.floor((remain%86400000)/3600000);
+    const m = Math.floor((remain%3600000)/60000);
+    const s = Math.floor((remain%60000)/1000);
 
     document.getElementById("countdown").innerHTML=
-        `เหลือ  วัน  ชม  นาที  วิ`;
+        `เหลือ ${d} วัน ${h} ชม ${m} นาที ${s} วิ`;
 
-    const total=endDate-WORK_START;
-    const passed=now-WORK_START;
-    const percent=Math.min(Math.max((passed/total)*100,0),100);
+    const total = endDate - WORK_START;
+    const passed = now - WORK_START;
+    const percent = Math.min(Math.max((passed / total) * 100, 0), 100);
 
-    document.getElementById("bar").style.width=percent+"%";
-    document.getElementById("percent").innerHTML=
-        "ความคืบหน้า "+percent.toFixed(1)+"%";
+    document.getElementById("bar").style.width = percent + "%";
+    document.getElementById("percent").innerHTML = "ความคืบหน้า "+percent.toFixed(1)+"%";
 
     updateWorldClock();
-    updateFlightRoute();   // 👈 สำคัญมาก
+    updateFlightRoute();
 }
 
 setInterval(update,1000);
 update();
 
 /* ================= WORLD CLOCK ================= */
-
 function updateWorldClock(){
     document.getElementById("world").innerHTML=
         "🇹🇭 ไทย: "+new Date().toLocaleString("th-TH",{timeZone:"Asia/Bangkok"})+"<br>"+
@@ -183,7 +175,6 @@ function updateWorldClock(){
 }
 
 /* ================= FLIGHT ROUTE ================= */
-
 function updateFlightRoute(){
     const options={
         timeZone:"Africa/Addis_Ababa",
@@ -193,46 +184,38 @@ function updateFlightRoute(){
         hour:"2-digit",
         minute:"2-digit"
     };
-
-    const formatted=endDate.toLocaleString("th-TH",options);
-
+    const formatted = endDate.toLocaleString("th-TH",options);
     document.getElementById("flightRoute").innerHTML=
         "ADD → SIN → KUL → BKK<br>"+
         "ออกเดินทาง: "+formatted+" (เวลาเอธิโอเปีย)";
 }
 
 /* ================= WEATHER ================= */
-
 const apiKey="10305e607cbb444690ceede20de29e6a";
 function fetchWeather(){
-    if(apiKey==="YOUR_API_KEY"){
-        document.getElementById("weather").innerHTML="ใส่ API Key ก่อน";
-        return;
-    }
-
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=Bangkok,TH&appid=&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=Bangkok,TH&appid=${apiKey}&units=metric`)
     .then(res=>res.json())
     .then(data=>{
-        document.getElementById("weather").innerHTML=
-            `°C, `;
+        let temp = data.main.temp.toFixed(1);
+        let desc = data.weather[0].description;
+        document.getElementById("weather").innerHTML = `🌡 ${temp}°C, ${desc}`;
     })
     .catch(()=>document.getElementById("weather").innerHTML="โหลดไม่สำเร็จ");
 }
 fetchWeather();
+setInterval(fetchWeather, 10*60*1000);
 
 /* ================= CALENDAR ================= */
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
 
-let calYear=new Date().getFullYear();
-let calMonth=new Date().getMonth();
-
-function generateCalendar(year,month){
-    const calendar=document.getElementById("calendar");
-    calendar.innerHTML="";
+function generateCalendar(year, month){
+    const calendar = document.getElementById("calendar");
+    calendar.innerHTML = "";
 
     const months=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน",
                   "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
-    document.getElementById("monthTitle").innerHTML=
-        months[month]+" "+year;
+    document.getElementById("monthTitle").innerHTML = months[month]+" "+year;
 
     const weekdays=["อา","จ","อ","พ","พฤ","ศ","ส"];
     weekdays.forEach(w=>{
@@ -248,42 +231,41 @@ function generateCalendar(year,month){
     for(let i=0;i<firstDay;i++)
         calendar.appendChild(document.createElement("div"));
 
-for(let d=1; d<=lastDate; d++){
-    const day = document.createElement("div");
-    day.className = "calendar-day";
-    day.textContent = d;
+    for(let d=1; d<=lastDate; d++){
+        const day = document.createElement("div");
+        day.className = "calendar-day";
+        day.textContent = d;
 
-    const thisDate = new Date(year, month, d);
+        const thisDate = new Date(year, month, d);
 
-    // วันเดินทางและวันทำงาน
-    if(thisDate.toDateString() === travelDate.toDateString())
-        day.classList.add("travel");
-    if(thisDate.toDateString() === workDate.toDateString())
-        day.classList.add("work");
-    if(thisDate.toDateString() === new Date().toDateString())
-        day.classList.add("today");
+        if(thisDate.toDateString() === travelDate.toDateString())
+            day.classList.add("travel");
+        if(thisDate.toDateString() === workDate.toDateString())
+            day.classList.add("work");
+        if(thisDate.toDateString() === new Date().toDateString())
+            day.classList.add("today");
 
-    // วันทำงานที่ผ่านมา → สีเขียวแบบ workDate
-    if(thisDate >= WORK_START && thisDate < new Date()){
-        day.classList.add("work");
+        if(thisDate >= WORK_START && thisDate < new Date()){
+            day.classList.add("work");
+        }
+
+        calendar.appendChild(day);
     }
-
-    calendar.appendChild(day);
-}
 }
 
 function prevMonth(){
     calMonth--;
-    if(calMonth<0){calMonth=11;calYear--;}
+    if(calMonth<0){calMonth=11; calYear--;}
     generateCalendar(calYear,calMonth);
 }
 function nextMonth(){
     calMonth++;
-    if(calMonth>11){calMonth=0;calYear++;}
+    if(calMonth>11){calMonth=0; calYear++;}
     generateCalendar(calYear,calMonth);
 }
 
-generateCalendar(calYear,calMonth);
-
+generateCalendar(calYear, calMonth);
 </script>
+
 </body>
+</html>
