@@ -1,271 +1,293 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thailand Countdown Ultimate</title>
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="icon" type="image/png" href="icon.png">
-<meta name="theme-color" content="#0d47a1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thailand Countdown Compact</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --accent: #ff9800;
+            --success: #4caf50;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+        }
 
-<style>
-body{
-    margin:0;
-    font-family:sans-serif;
-    text-align:center;
-    background:linear-gradient(to right,#0d47a1,#42a5f5);
-    color:white;
-    padding:20px;
-}
-.card{
-    background:white;
-    color:#333;
-    padding:20px;
-    border-radius:20px;
-    max-width:600px;
-    margin:auto;
-}
-.progress{
-    width:100%;
-    background:#ddd;
-    border-radius:10px;
-    overflow:hidden;
-}
-.bar{
-    height:15px;
-    background:#4caf50;
-    width:0%;
-    transition:width .5s ease;
-}
-input,button{
-    padding:6px;
-    margin:5px;
-}
-button{
-    background:#0d47a1;
-    color:white;
-    border:none;
-    border-radius:6px;
-}
-button:hover{opacity:.9;}
+        body {
+            margin: 0;
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #1a237e, #1e88e5);
+            background-attachment: fixed;
+            color: #333;
+            padding: 10px;
+        }
 
-#calendar{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:5px;
-    margin-top:10px;
-}
-.calendar-day,.calendar-weekday{
-    padding:8px;
-    border-radius:5px;
-    background:#f0f0f0;
-    font-size:13px;
-}
-.calendar-weekday{
-    background:#90caf9;
-    font-weight:bold;
-}
-.travel{background:#ff9800;color:white;}
-.work{background:#4caf50;color:white;}
-.today{border:2px solid #0d47a1;}
-#monthTitle{font-weight:bold;margin:10px 0;color:#0d47a1;}
-</style>
+        .card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            margin: auto;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h2 { color: #0d47a1; font-size: 1.2rem; margin-bottom: 15px; }
+        h3 { font-size: 0.9rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 10px; }
+
+        /* Countdown & Progress - Compact */
+        #countdownText { font-size: 1.2rem; font-weight: 700; color: #d32f2f; margin: 10px 0; }
+        .progress-container { background: #eee; border-radius: 10px; height: 12px; margin: 5px 0; overflow: hidden; }
+        .bar { height: 100%; background: var(--success); width: 0%; transition: 1s ease-in-out; }
+        #percentText { font-size: 0.8rem; font-weight: bold; color: var(--success); }
+
+        /* Grid System for Compactness */
+        .compact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .mini-box {
+            background: #fff;
+            padding: 10px 5px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .mini-box b { font-size: 0.75rem; display: block; color: #777; margin-bottom: 3px; }
+        .mini-box span { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
+
+        /* Weather Compact */
+        .weather-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .weather-mini {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #f8fbff;
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid #e3f2fd;
+        }
+        .weather-mini i { font-size: 1.4rem; } /* ไอคอนเล็กลง */
+        .weather-info-text { text-align: left; }
+        .weather-info-text b { font-size: 0.7rem; color: #888; display: block; }
+        .weather-info-text span { font-size: 1rem; font-weight: 700; }
+
+        /* Checklist - More Neat */
+        .checklist { text-align: left; background: #fff; padding: 12px; border-radius: 15px; border: 1px solid #eee; }
+        .check-item { display: flex; align-items: center; font-size: 0.85rem; margin-bottom: 6px; color: #444; }
+        .check-item input { width: 16px; height: 16px; margin-right: 8px; cursor: pointer; }
+
+        /* Calendar - Smaller */
+        #calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-day { padding: 6px 0; font-size: 0.75rem; border-radius: 6px; background: #fff; border: 1px solid #f5f5f5; }
+        .calendar-weekday { font-size: 0.7rem; font-weight: 700; color: var(--primary); padding: 5px 0; }
+        .done { background: #e8f5e9 !important; color: #2e7d32; }
+        .travel { background: var(--accent) !important; color: white; font-weight: 700; }
+        .today { border: 2px solid var(--primary); }
+
+        button { padding: 8px 15px; font-size: 0.8rem; border-radius: 8px; border: none; background: var(--primary); color: white; cursor: pointer; }
+        input[type="datetime-local"] { padding: 6px; font-size: 0.8rem; border-radius: 8px; border: 1px solid #ddd; }
+        
+        .flight-tag { background: #e3f2fd; color: #0d47a1; padding: 10px; border-radius: 10px; font-size: 0.8rem; text-align: left; margin: 10px 0; border-left: 4px solid var(--primary); }
+
+        hr { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+    </style>
 </head>
 <body>
 
 <div class="card">
-<h2>นับถอยหลังวันกลับบ้าน 🇹🇭✈️</h2>
+    <h2>🇹🇭 นับถอยหลังกลับบ้าน ✈️</h2>
 
-<p>วันบินกลับ:</p>
-<input type="datetime-local" id="end">
-<button onclick="saveDate()">บันทึก</button>
+    <div style="display:flex; justify-content:center; gap:5px; margin-bottom:10px;">
+        <input type="datetime-local" id="endDateInput">
+        <button onclick="saveSettings()">ตั้งวันบิน</button>
+    </div>
 
-<h3 id="countdown"></h3>
-<div class="progress"><div class="bar" id="bar"></div></div>
-<div id="percent"></div>
+    <div id="countdownText">...</div>
+    <div class="progress-container"><div class="bar" id="progressBar"></div></div>
+    <div id="percentText">0%</div>
 
-<hr>
-<h3>🌍 เวลาโลก</h3>
-<div id="world"></div>
+    <div class="flight-tag" id="flightRoute"></div>
 
-<hr>
-<h3>🛫 เส้นทางบิน</h3>
-<div id="flightRoute"></div>
+    <hr>
+    <h3>🌍 เวลาโลก (Local Time)</h3>
+    <div class="compact-grid" id="worldClock"></div>
 
-<hr>
-<h3>🌤 อากาศกรุงเทพ</h3>
-<div id="weather">กำลังโหลด...</div>
+    <hr>
+    <h3>🌤 สภาพอากาศ</h3>
+    <div class="weather-row" id="weatherDisplay"></div>
 
-<hr>
-<h3>📆 ปฏิทิน</h3>
-<div id="monthTitle"></div>
-<button onclick="prevMonth()">◀</button>
-<button onclick="nextMonth()">▶</button>
-<div id="calendar"></div>
+    <hr>
+    <h3>📋 Checklist เตรียมตัว</h3>
+    <div class="checklist" id="checklist">
+        <label class="check-item"><input type="checkbox" onchange="saveCheck()"> 🛂 พาสปอร์ต/ตั๋ว</label>
+        <label class="check-item"><input type="checkbox" onchange="saveCheck()"> 🎁 ของฝาก</label>
+        <label class="check-item"><input type="checkbox" onchange="saveCheck()"> 🔌 หัวแปลงปลั๊ก/สายชาร์จ</label>
+    </div>
+
+    <hr>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <b id="monthLabel" style="font-size:0.9rem;"></b>
+        <div>
+            <button onclick="changeMonth(-1)" style="padding:4px 8px;"><i class="fa fa-chevron-left"></i></button>
+            <button onclick="changeMonth(1)" style="padding:4px 8px;"><i class="fa fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <div id="calendar"></div>
 </div>
 
 <script>
-/* ================= SETTINGS ================= */
-const DEFAULT_DATE = "2026-04-23T23:50";
-const WORK_START = new Date("2026-02-05");
-const travelDate = new Date("2026-04-23");
-const workDate = new Date("2026-02-05");
+const WORK_START_DATE = new Date("2026-02-05T00:00:00");
+const TRAVEL_DATE = new Date("2026-04-23T23:50:00");
+const API_KEY = "10305e607cbb444690ceede20de29e6a";
+let targetDate = new Date(localStorage.getItem("userEndDate") || "2026-04-23T23:50");
 
-/* ================= DATE INIT ================= */
-let endDate = new Date(localStorage.getItem("end") || DEFAULT_DATE);
-
-function formatLocal(date){
-    const pad = n => n.toString().padStart(2,'0');
-    return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())+
-           "T"+pad(date.getHours())+":"+pad(date.getMinutes());
+function init() {
+    document.getElementById("endDateInput").value = targetDate.toISOString().slice(0, 16);
+    updateTick();
+    setInterval(updateTick, 1000);
+    renderWeather();
+    renderCalendar();
+    loadChecklist();
 }
 
-document.getElementById("end").value = formatLocal(endDate);
-
-function saveDate(){
-    const val = document.getElementById("end").value;
-    if(!val) return;
-    endDate = new Date(val);
-    localStorage.setItem("end", val);
-    update();
+function saveSettings() {
+    const val = document.getElementById("endDateInput").value;
+    if(val) {
+        targetDate = new Date(val);
+        localStorage.setItem("userEndDate", val);
+        location.reload();
+    }
 }
 
-/* ================= COUNTDOWN ================= */
-function update(){
+function updateTick() {
     const now = new Date();
-    const remain = endDate - now;
+    const diff = targetDate - now;
 
-    if(remain <=0){
-        document.getElementById("countdown").innerHTML="🎉 ถึงวันกลับไทยแล้ว!";
-        document.getElementById("bar").style.width="100%";
-        document.getElementById("percent").innerHTML="100%";
-        updateFlightRoute();
-        return;
+    // Countdown ปกติ
+    if (diff <= 0) {
+        document.getElementById("countdownText").innerHTML = "🎉 Safe Flight!";
+    } else {
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        // เพิ่มบรรทัดใหม่: ทำงานอีก ...
+        const workDiff = targetDate - now;
+        const wd = Math.floor(workDiff / 86400000);
+        const wh = Math.floor((workDiff % 86400000) / 3600000);
+        const wm = Math.floor((workDiff % 3600000) / 60000);
+        const ws = Math.floor((workDiff % 60000) / 1000);
+
+        document.getElementById("countdownText").innerHTML = 
+            `ทำงานอีก ${wd} วัน ${wh} ชั่วโมง ${wm} นาที ${ws} วินาที`;
     }
 
-    const d = Math.floor(remain/86400000);
-    const h = Math.floor((remain%86400000)/3600000);
-    const m = Math.floor((remain%3600000)/60000);
-    const s = Math.floor((remain%60000)/1000);
+    // Progress bar
+    const elapsed = now - WORK_START_DATE;
+    const percent = Math.min(Math.max((elapsed / (targetDate - WORK_START_DATE)) * 100, 0), 100);
+    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("percentText").innerHTML = `ทำงานไปแล้ว: ${percent.toFixed(2)}%`;
 
-    document.getElementById("countdown").innerHTML=
-        `เหลือ ${d} วัน ${h} ชม ${m} นาที ${s} วิ`;
+    // World Clock
+    const opt = { hour: '2-digit', minute: '2-digit', hour12: false };
+    document.getElementById("worldClock").innerHTML = `
+        <div class="mini-box"><b>ไทย</b><span>${now.toLocaleTimeString("th-TH", {timeZone:"Asia/Bangkok", ...opt})}</span></div>
+        <div class="mini-box"><b>มาเลย์</b><span>${now.toLocaleTimeString("th-TH", {timeZone:"Asia/Kuala_Lumpur", ...opt})}</span></div>
+        <div class="mini-box"><b>เอธิโอฯ</b><span>${now.toLocaleTimeString("th-TH", {timeZone:"Africa/Addis_Ababa", ...opt})}</span></div>
+    `;
 
-    const total = endDate - WORK_START;
-    const passed = now - WORK_START;
-    const percent = Math.min(Math.max((passed / total) * 100, 0), 100);
-
-    document.getElementById("bar").style.width = percent + "%";
-    document.getElementById("percent").innerHTML = "ความคืบหน้า "+percent.toFixed(1)+"%";
-
-    updateWorldClock();
-    updateFlightRoute();
+    // Flight Route
+    document.getElementById("flightRoute").innerHTML = `<b>ADD ✈ SIN ✈ KUL ✈ BKK</b><br>วันบินกลับไทย: ${targetDate.toLocaleDateString('th-TH', {day:'numeric', month:'short'})} | ${targetDate.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'})} น.`;
 }
 
-setInterval(update,1000);
-update();
-
-/* ================= WORLD CLOCK ================= */
-function updateWorldClock(){
-    document.getElementById("world").innerHTML=
-        "🇹🇭 ไทย: "+new Date().toLocaleString("th-TH",{timeZone:"Asia/Bangkok"})+"<br>"+
-        "🇪🇹 เอธิโอเปีย: "+new Date().toLocaleString("en-GB",{timeZone:"Africa/Addis_Ababa"})+"<br>"+
-        "🇸🇬 สิงคโปร์: "+new Date().toLocaleString("en-GB",{timeZone:"Asia/Singapore"})+"<br>"+
-        "🇲🇾 กัวลาลัมเปอร์: "+new Date().toLocaleString("en-GB",{timeZone:"Asia/Kuala_Lumpur"});
+async function renderWeather() {
+    const cities = [{n:"Bangkok", c:"TH", f:"🇹🇭"}, {n:"Hawassa", c:"ET", f:"🇪🇹"}];
+    const icons = {"01d":"fa-sun","01n":"fa-moon","02d":"fa-cloud-sun","03d":"fa-cloud","04d":"fa-cloud","09d":"fa-cloud-showers-heavy","10d":"fa-cloud-rain","11d":"fa-bolt","50d":"fa-smog"};
+    
+    try {
+        const html = await Promise.all(cities.map(async city => {
+            const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.n},${city.c}&appid=${API_KEY}&units=metric`);
+            const d = await r.json();
+            const icon = icons[d.weather[0].icon] || "fa-cloud";
+            return `
+                <div class="weather-mini">
+                    <i class="fa-solid ${icon}" style="color:${icon.includes('sun')?'#ff9800':'#2196f3'}"></i>
+                    <div class="weather-info-text">
+                        <b>${city.f} ${city.n}</b>
+                        <span>${Math.round(d.main.temp)}°C</span>
+                    </div>
+                </div>`;
+        }));
+        document.getElementById("weatherDisplay").innerHTML = html.join('');
+    } catch(e) { document.getElementById("weatherDisplay").innerHTML = "-"; }
 }
 
-/* ================= FLIGHT ROUTE ================= */
-function updateFlightRoute(){
-    const options={
-        timeZone:"Africa/Addis_Ababa",
-        day:"numeric",
-        month:"long",
-        year:"numeric",
-        hour:"2-digit",
-        minute:"2-digit"
-    };
-    const formatted = endDate.toLocaleString("th-TH",options);
-    document.getElementById("flightRoute").innerHTML=
-        "ADD → SIN → KUL → BKK<br>"+
-        "ออกเดินทาง: "+formatted+" (เวลาเอธิโอเปีย)";
+function saveCheck() {
+    const items = document.querySelectorAll('#checklist input');
+    localStorage.setItem("packingCompact", JSON.stringify(Array.from(items).map(i => i.checked)));
+}
+function loadChecklist() {
+    const checks = JSON.parse(localStorage.getItem("packingCompact") || "[]");
+    document.querySelectorAll('#checklist input').forEach((item, i) => item.checked = checks[i] || false);
 }
 
-/* ================= WEATHER ================= */
-const apiKey="10305e607cbb444690ceede20de29e6a";
-function fetchWeather(){
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=Bangkok,TH&appid=${apiKey}&units=metric`)
-    .then(res=>res.json())
-    .then(data=>{
-        let temp = data.main.temp.toFixed(1);
-        let desc = data.weather[0].description;
-        document.getElementById("weather").innerHTML = `🌡 ${temp}°C, ${desc}`;
-    })
-    .catch(()=>document.getElementById("weather").innerHTML="โหลดไม่สำเร็จ");
-}
-fetchWeather();
-setInterval(fetchWeather, 10*60*1000);
+let viewDate = new Date();
+function renderCalendar() {
+    const cal = document.getElementById("calendar");
+    cal.innerHTML = "";
+    const y = viewDate.getFullYear();
+    const m = viewDate.getMonth();
+    const monthNames = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+    document.getElementById("monthLabel").innerText = `${monthNames[m]} ${y + 543}`;
 
-/* ================= CALENDAR ================= */
-let calYear = new Date().getFullYear();
-let calMonth = new Date().getMonth();
+    ["อา","จ","อ","พ","พฤ","ศ","ส"].forEach(d => cal.innerHTML += `<div class="calendar-weekday">${d}</div>`);
 
-function generateCalendar(year, month){
-    const calendar = document.getElementById("calendar");
-    calendar.innerHTML = "";
+    const firstDay = new Date(y, m, 1).getDay();
+    const lastDate = new Date(y, m + 1, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
 
-    const months=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน",
-                  "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
-    document.getElementById("monthTitle").innerHTML = months[month]+" "+year;
+    // นับวันทำงานไปแล้วในเดือนนี้
+    let workDaysCount = 0;
 
-    const weekdays=["อา","จ","อ","พ","พฤ","ศ","ส"];
-    weekdays.forEach(w=>{
-        const d=document.createElement("div");
-        d.className="calendar-weekday";
-        d.textContent=w;
-        calendar.appendChild(d);
-    });
-
-    const firstDay=new Date(year,month,1).getDay();
-    const lastDate=new Date(year,month+1,0).getDate();
-
-    for(let i=0;i<firstDay;i++)
-        calendar.appendChild(document.createElement("div"));
-
-    for(let d=1; d<=lastDate; d++){
-        const day = document.createElement("div");
-        day.className = "calendar-day";
-        day.textContent = d;
-
-        const thisDate = new Date(year, month, d);
-
-        if(thisDate.toDateString() === travelDate.toDateString())
-            day.classList.add("travel");
-        if(thisDate.toDateString() === workDate.toDateString())
-            day.classList.add("work");
-        if(thisDate.toDateString() === new Date().toDateString())
-            day.classList.add("today");
-
-        if(thisDate >= WORK_START && thisDate < new Date()){
-            day.classList.add("work");
+    for (let i = 0; i < firstDay; i++) cal.innerHTML += `<div></div>`;
+    for (let d = 1; d <= lastDate; d++) {
+        const cur = new Date(y, m, d);
+        let cls = "calendar-day";
+        if (cur >= WORK_START_DATE && cur < today) {
+            cls += " done";
+            workDaysCount++;
         }
+        if (cur.toDateString() === TRAVEL_DATE.toDateString()) cls += " travel";
+        if (cur.toDateString() === today.toDateString()) cls += " today";
+        cal.innerHTML += `<div class="${cls}">${d}</div>`;
+    }
 
-        calendar.appendChild(day);
+    // แสดงจำนวนวันที่ทำงานไปแล้วของเดือนนี้
+    const workInfo = document.getElementById("workInfo");
+    if(!workInfo) {
+        const infoDiv = document.createElement("div");
+        infoDiv.id = "workInfo";
+        infoDiv.style.textAlign = "right";
+        infoDiv.style.fontSize = "0.8rem";
+        infoDiv.style.margin = "5px 0";
+        infoDiv.style.color = "#1e88e5";
+        infoDiv.innerText = `ทำงานไปแล้ว ${workDaysCount} วันในเดือนนี้`;
+        cal.parentNode.insertBefore(infoDiv, cal);
+    } else {
+        workInfo.innerText = `ทำงานไปแล้ว ${workDaysCount} วันในเดือนนี้`;
     }
 }
-
-function prevMonth(){
-    calMonth--;
-    if(calMonth<0){calMonth=11; calYear--;}
-    generateCalendar(calYear,calMonth);
-}
-function nextMonth(){
-    calMonth++;
-    if(calMonth>11){calMonth=0; calYear++;}
-    generateCalendar(calYear,calMonth);
-}
-
-generateCalendar(calYear, calMonth);
+function changeMonth(s) { viewDate.setMonth(viewDate.getMonth() + s); renderCalendar(); }
+init();
 </script>
-
 </body>
 </html>
