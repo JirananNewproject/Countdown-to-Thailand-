@@ -3,159 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thailand Countdown Compact</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <title>Thailand Countdown Ultimate</title>
     <style>
         :root {
-            --primary: #1e88e5;
+            --primary: #0d47a1;
+            --secondary: #42a5f5;
             --accent: #ff9800;
-            --success: #4caf50;
-            --bg-glass: rgba(255, 255, 255, 0.9);
+            --success: #4caf50; /* สีเขียวสำหรับวันที่ทำไปแล้ว */
         }
 
         body {
             margin: 0;
-            font-family: 'Sarabun', sans-serif;
-            background: linear-gradient(135deg, #1a237e, #1e88e5);
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #0d47a1, #42a5f5);
             background-attachment: fixed;
-            color: #333;
-            padding: 10px;
-        }
-
-        .card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            margin: auto;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            color: white;
+            padding: 15px;
             text-align: center;
         }
 
-        h2 { color: #0d47a1; font-size: 1.2rem; margin-bottom: 15px; }
-        h3 { font-size: 0.9rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 10px; }
+        .card {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
 
-        /* Countdown & Progress - Compact */
-        #countdownText { font-size: 1.2rem; font-weight: 700; color: #d32f2f; margin: 10px 0; }
-        .progress-container { background: #eee; border-radius: 10px; height: 12px; margin: 5px 0; overflow: hidden; }
-        .bar { height: 100%; background: var(--success); width: 0%; transition: 1s ease-in-out; }
-        #percentText { font-size: 0.8rem; font-weight: bold; color: var(--success); }
+        .progress-container {
+            width: 100%;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
 
-        /* Grid System for Compactness */
-        .compact-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .bar {
+            height: 15px;
+            background: var(--success);
+            width: 0%;
+            transition: width .5s ease;
+        }
+
+        input, button { padding: 8px; margin: 5px; border-radius: 6px; border: 1px solid #ccc; }
+        button { background: var(--primary); color: white; border: none; cursor: pointer; }
+
+        /* Grid Layouts */
+        .grid-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 8px;
             margin: 10px 0;
         }
 
-        .mini-box {
-            background: #fff;
-            padding: 10px 5px;
+        .box {
+            background: #f0f4f8;
+            color: var(--primary);
+            padding: 8px 12px;
             border-radius: 12px;
+            font-size: 13px;
+            min-width: 120px;
+            border: 1px solid #d1d9e6;
+        }
+
+        /* Flight Route */
+        .flight-info {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            margin: 15px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        /* Calendar */
+        #calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .calendar-day {
+            padding: 8px 0;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #fff; /* พื้นหลังปกติเป็นสีขาว */
             border: 1px solid #eee;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .mini-box b { font-size: 0.75rem; display: block; color: #777; margin-bottom: 3px; }
-        .mini-box span { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
-
-        /* Weather Compact */
-        .weather-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .weather-mini {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: #f8fbff;
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid #e3f2fd;
-        }
-        .weather-mini i { font-size: 1.4rem; } /* ไอคอนเล็กลง */
-        .weather-info-text { text-align: left; }
-        .weather-info-text b { font-size: 0.7rem; color: #888; display: block; }
-        .weather-info-text span { font-size: 1rem; font-weight: 700; }
-
-        /* Checklist - More Neat */
-        .checklist { text-align: left; background: #fff; padding: 12px; border-radius: 15px; border: 1px solid #eee; }
-        .check-item { display: flex; align-items: center; font-size: 0.85rem; margin-bottom: 6px; color: #444; }
-        .check-item input { width: 16px; height: 16px; margin-right: 8px; cursor: pointer; }
-
-        /* Calendar - Smaller */
-        #calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .calendar-day { padding: 6px 0; font-size: 0.75rem; border-radius: 6px; background: #fff; border: 1px solid #f5f5f5; }
-        .calendar-weekday { font-size: 0.7rem; font-weight: 700; color: var(--primary); padding: 5px 0; }
-        .done { background: #e8f5e9 !important; color: #2e7d32; }
-        .travel { background: var(--accent) !important; color: white; font-weight: 700; }
-        .today { border: 2px solid var(--primary); }
-
-        button { padding: 8px 15px; font-size: 0.8rem; border-radius: 8px; border: none; background: var(--primary); color: white; cursor: pointer; }
-        input[type="datetime-local"] { padding: 6px; font-size: 0.8rem; border-radius: 8px; border: 1px solid #ddd; }
+        .calendar-weekday { background: #bbdefb; font-weight: bold; padding: 5px 0; border-radius: 4px; }
         
-        .flight-tag { background: #e3f2fd; color: #0d47a1; padding: 10px; border-radius: 10px; font-size: 0.8rem; text-align: left; margin: 10px 0; border-left: 4px solid var(--primary); }
-
-        hr { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+        /* สีกำหนดสถานะ */
+        .done { background: var(--success) !important; color: white; } /* ทำงานไปแล้ว */
+        .travel { background: var(--accent) !important; color: white; font-weight: bold; } /* วันบิน */
+        .today { border: 2px solid var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>🇹🇭 นับถอยหลังกลับบ้าน ✈️</h2>
+    <h2>🇹🇭 นับถอยหลังกลับไทย ✈️</h2>
 
-    <div style="display:flex; justify-content:center; gap:5px; margin-bottom:10px;">
-        <input type="datetime-local" id="endDateInput">
-        <button onclick="saveSettings()">ตั้งวันบิน</button>
-    </div>
+    <p>ระบุวันบินกลับ:</p>
+    <input type="datetime-local" id="endDateInput">
+    <button onclick="saveSettings()">บันทึก</button>
 
-    <div id="countdownText">...</div>
+    <h3 id="countdownText">กำลังคำนวณ...</h3>
     <div class="progress-container"><div class="bar" id="progressBar"></div></div>
-    <div id="percentText">0%</div>
-
-    <div class="flight-tag" id="flightRoute"></div>
+    <div id="percentText" style="font-weight:bold; color:var(--success);">0%</div>
 
     <hr>
-    <h3>🌍 เวลาโลก (Local Time)</h3>
-    <div class="compact-grid" id="worldClock"></div>
+    <h3>🛫 รายละเอียดการเดินทาง</h3>
+    <div class="flight-info" id="flightRoute"></div>
 
     <hr>
-    <h3>🌤 สภาพอากาศ</h3>
-    <div class="weather-row" id="weatherDisplay"></div>
+    <h3>🌍 เวลาโลก</h3>
+    <div class="grid-row" id="worldClock"></div>
 
     <hr>
-    <h3>📋 Checklist เตรียมตัว</h3>
-    <div class="checklist" id="checklist">
-        <label class="check-item"><input type="checkbox" onchange="saveCheck()"> 🛂 พาสปอร์ต/ตั๋ว</label>
-        <label class="check-item"><input type="checkbox" onchange="saveCheck()"> 🎁 ของฝาก</label>
-        <label class="check-item"><input type="checkbox" onchange="saveCheck()"> 🔌 หัวแปลงปลั๊ก/สายชาร์จ</label>
-    </div>
+    <h3>🌤 อากาศวันนี้</h3>
+    <div class="grid-row" id="weatherDisplay"></div>
 
     <hr>
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <b id="monthLabel" style="font-size:0.9rem;"></b>
-        <div>
-            <button onclick="changeMonth(-1)" style="padding:4px 8px;"><i class="fa fa-chevron-left"></i></button>
-            <button onclick="changeMonth(1)" style="padding:4px 8px;"><i class="fa fa-chevron-right"></i></button>
-        </div>
-    </div>
+    <h3>📆 ปฏิทินการทำงาน</h3>
+    <div id="monthLabel" style="font-weight:bold; color:var(--primary); margin-bottom:10px;"></div>
+    <button onclick="changeMonth(-1)">◀</button>
+    <button onclick="changeMonth(1)">▶</button>
     <div id="calendar"></div>
 </div>
 
 <script>
+/* ================= CONFIG ================= */
 const WORK_START_DATE = new Date("2026-02-05T00:00:00");
 const TRAVEL_DATE = new Date("2026-04-23T23:50:00");
 const API_KEY = "10305e607cbb444690ceede20de29e6a";
+
 let targetDate = new Date(localStorage.getItem("userEndDate") || "2026-04-23T23:50");
 
+/* ================= INITIALIZE ================= */
 function init() {
     document.getElementById("endDateInput").value = targetDate.toISOString().slice(0, 16);
     updateTick();
     setInterval(updateTick, 1000);
     renderWeather();
     renderCalendar();
-    loadChecklist();
 }
 
 function saveSettings() {
@@ -163,130 +159,113 @@ function saveSettings() {
     if(val) {
         targetDate = new Date(val);
         localStorage.setItem("userEndDate", val);
-        location.reload();
+        renderCalendar();
     }
 }
 
+/* ================= CORE LOGIC ================= */
 function updateTick() {
     const now = new Date();
     const diff = targetDate - now;
 
-    // Countdown ปกติ
+    // Countdown Text
     if (diff <= 0) {
-        document.getElementById("countdownText").innerHTML = "🎉 Safe Flight!";
+        document.getElementById("countdownText").innerHTML = "🎉 ถึงวันเดินทางแล้ว!";
     } else {
         const d = Math.floor(diff / 86400000);
         const h = Math.floor((diff % 86400000) / 3600000);
         const m = Math.floor((diff % 3600000) / 60000);
         const s = Math.floor((diff % 60000) / 1000);
-
-        // เพิ่มบรรทัดใหม่: ทำงานอีก ...
-        const workDiff = targetDate - now;
-        const wd = Math.floor(workDiff / 86400000);
-        const wh = Math.floor((workDiff % 86400000) / 3600000);
-        const wm = Math.floor((workDiff % 3600000) / 60000);
-        const ws = Math.floor((workDiff % 60000) / 1000);
-
-        document.getElementById("countdownText").innerHTML = 
-            `ทำงานอีก ${wd} วัน ${wh} ชั่วโมง ${wm} นาที ${ws} วินาที`;
+        document.getElementById("countdownText").innerHTML = `เหลืออีก ${d} วัน ${h} ชม. ${m} นาที ${s} วิ`;
     }
 
-    // Progress bar
+    // Progress Bar (ยึดตามวันเริ่มงานจนถึงวันบิน)
+    const totalDuration = targetDate - WORK_START_DATE;
     const elapsed = now - WORK_START_DATE;
-    const percent = Math.min(Math.max((elapsed / (targetDate - WORK_START_DATE)) * 100, 0), 100);
+    const percent = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
     document.getElementById("progressBar").style.width = percent + "%";
-    document.getElementById("percentText").innerHTML = `ทำงานไปแล้ว: ${percent.toFixed(2)}%`;
+    document.getElementById("percentText").innerHTML = `ทำงานไปแล้ว ${percent.toFixed(2)}%`;
 
-    // World Clock
-    const opt = { hour: '2-digit', minute: '2-digit', hour12: false };
+    // World Clock (เปลี่ยนสิงคโปร์เป็นมาเลเซีย)
+    const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
     document.getElementById("worldClock").innerHTML = `
-        <div class="mini-box"><b>ไทย</b><span>${now.toLocaleTimeString("th-TH", {timeZone:"Asia/Bangkok", ...opt})}</span></div>
-        <div class="mini-box"><b>มาเลย์</b><span>${now.toLocaleTimeString("th-TH", {timeZone:"Asia/Kuala_Lumpur", ...opt})}</span></div>
-        <div class="mini-box"><b>เอธิโอฯ</b><span>${now.toLocaleTimeString("th-TH", {timeZone:"Africa/Addis_Ababa", ...opt})}</span></div>
+        <div class="box">🇹🇭 ไทย: ${now.toLocaleTimeString("th-TH", {timeZone:"Asia/Bangkok", ...timeOptions})}</div>
+        <div class="box">🇲🇾 มาเลเซีย: ${now.toLocaleTimeString("th-TH", {timeZone:"Asia/Kuala_Lumpur", ...timeOptions})}</div>
+        <div class="box">🇪🇹 เอธิโอเปีย: ${now.toLocaleTimeString("th-TH", {timeZone:"Africa/Addis_Ababa", ...timeOptions})}</div>
     `;
 
-    // Flight Route
-    document.getElementById("flightRoute").innerHTML = `<b>ADD ✈ SIN ✈ KUL ✈ BKK</b><br>วันบินกลับไทย: ${targetDate.toLocaleDateString('th-TH', {day:'numeric', month:'short'})} | ${targetDate.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'})} น.`;
+    // Flight Info
+    const flightTimeStr = targetDate.toLocaleString("th-TH", { 
+        timeZone: "Africa/Addis_Ababa", 
+        day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' 
+    });
+    document.getElementById("flightRoute").innerHTML = `
+        เส้นทาง: ADD ✈ SIN ✈ KUL ✈ BKK<br>
+        <span style="font-size:13px; font-weight:normal;">เช็คอิน (เวลาเอธิโอเปีย): ${flightTimeStr} น.</span>
+    `;
 }
 
+/* ================= WEATHER ================= */
 async function renderWeather() {
     const cities = [{n:"Bangkok", c:"TH", f:"🇹🇭"}, {n:"Hawassa", c:"ET", f:"🇪🇹"}];
-    const icons = {"01d":"fa-sun","01n":"fa-moon","02d":"fa-cloud-sun","03d":"fa-cloud","04d":"fa-cloud","09d":"fa-cloud-showers-heavy","10d":"fa-cloud-rain","11d":"fa-bolt","50d":"fa-smog"};
-    
     try {
         const html = await Promise.all(cities.map(async city => {
             const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.n},${city.c}&appid=${API_KEY}&units=metric`);
             const d = await r.json();
-            const icon = icons[d.weather[0].icon] || "fa-cloud";
-            return `
-                <div class="weather-mini">
-                    <i class="fa-solid ${icon}" style="color:${icon.includes('sun')?'#ff9800':'#2196f3'}"></i>
-                    <div class="weather-info-text">
-                        <b>${city.f} ${city.n}</b>
-                        <span>${Math.round(d.main.temp)}°C</span>
-                    </div>
-                </div>`;
+            return `<div class="box"><b>${city.f} ${city.n}</b><br>${Math.round(d.main.temp)}°C | ${d.weather[0].main}</div>`;
         }));
         document.getElementById("weatherDisplay").innerHTML = html.join('');
-    } catch(e) { document.getElementById("weatherDisplay").innerHTML = "-"; }
+    } catch(e) { document.getElementById("weatherDisplay").innerHTML = "โหลดข้อมูลอากาศไม่สำเร็จ"; }
 }
 
-function saveCheck() {
-    const items = document.querySelectorAll('#checklist input');
-    localStorage.setItem("packingCompact", JSON.stringify(Array.from(items).map(i => i.checked)));
-}
-function loadChecklist() {
-    const checks = JSON.parse(localStorage.getItem("packingCompact") || "[]");
-    document.querySelectorAll('#checklist input').forEach((item, i) => item.checked = checks[i] || false);
-}
-
+/* ================= CALENDAR ================= */
 let viewDate = new Date();
 function renderCalendar() {
     const cal = document.getElementById("calendar");
     cal.innerHTML = "";
     const y = viewDate.getFullYear();
     const m = viewDate.getMonth();
-    const monthNames = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+    
+    const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
     document.getElementById("monthLabel").innerText = `${monthNames[m]} ${y + 543}`;
 
-    ["อา","จ","อ","พ","พฤ","ศ","ส"].forEach(d => cal.innerHTML += `<div class="calendar-weekday">${d}</div>`);
+    ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"].forEach(d => cal.innerHTML += `<div class="calendar-weekday">${d}</div>`);
 
     const firstDay = new Date(y, m, 1).getDay();
     const lastDate = new Date(y, m + 1, 0).getDate();
-    const today = new Date(); today.setHours(0,0,0,0);
-
-    // นับวันทำงานไปแล้วในเดือนนี้
-    let workDaysCount = 0;
+    const today = new Date();
+    today.setHours(0,0,0,0);
 
     for (let i = 0; i < firstDay; i++) cal.innerHTML += `<div></div>`;
-    for (let d = 1; d <= lastDate; d++) {
-        const cur = new Date(y, m, d);
-        let cls = "calendar-day";
-        if (cur >= WORK_START_DATE && cur < today) {
-            cls += " done";
-            workDaysCount++;
-        }
-        if (cur.toDateString() === TRAVEL_DATE.toDateString()) cls += " travel";
-        if (cur.toDateString() === today.toDateString()) cls += " today";
-        cal.innerHTML += `<div class="${cls}">${d}</div>`;
-    }
 
-    // แสดงจำนวนวันที่ทำงานไปแล้วของเดือนนี้
-    const workInfo = document.getElementById("workInfo");
-    if(!workInfo) {
-        const infoDiv = document.createElement("div");
-        infoDiv.id = "workInfo";
-        infoDiv.style.textAlign = "right";
-        infoDiv.style.fontSize = "0.8rem";
-        infoDiv.style.margin = "5px 0";
-        infoDiv.style.color = "#1e88e5";
-        infoDiv.innerText = `ทำงานไปแล้ว ${workDaysCount} วันในเดือนนี้`;
-        cal.parentNode.insertBefore(infoDiv, cal);
-    } else {
-        workInfo.innerText = `ทำงานไปแล้ว ${workDaysCount} วันในเดือนนี้`;
+    for (let d = 1; d <= lastDate; d++) {
+        const currentLoopDate = new Date(y, m, d);
+        let className = "calendar-day";
+
+        // เงื่อนไข: วันที่ทำงานไปแล้ว (เริ่ม 5 ก.พ. จนถึง "เมื่อวานนี้")
+        if (currentLoopDate >= WORK_START_DATE && currentLoopDate < today) {
+            className += " done";
+        }
+        
+        // เงื่อนไข: วันบินกลับ (23 เม.ย.)
+        if (currentLoopDate.toDateString() === TRAVEL_DATE.toDateString()) {
+            className += " travel";
+        }
+
+        // ไฮไลต์วันปัจจุบัน
+        if (currentLoopDate.toDateString() === today.toDateString()) {
+            className += " today";
+        }
+
+        cal.innerHTML += `<div class="${className}">${d}</div>`;
     }
 }
-function changeMonth(s) { viewDate.setMonth(viewDate.getMonth() + s); renderCalendar(); }
+
+function changeMonth(step) {
+    viewDate.setMonth(viewDate.getMonth() + step);
+    renderCalendar();
+}
+
 init();
 </script>
 </body>
